@@ -4,6 +4,7 @@ export const HeaderContainer = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 0.5rem;
 
   nav {
     display: flex;
@@ -27,6 +28,10 @@ export const HeaderContainer = styled.header`
 
       &.active {
         color: ${(props) => props.theme['green-500']};
+      }
+
+      &:focus {
+        box-shadow: none;
       }
     }
   }
