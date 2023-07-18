@@ -1,11 +1,29 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { CountdownContainer, Separator } from './styles'
 import { differenceInSeconds } from 'date-fns'
+import { CyclesContext } from '../..'
 
 export function Countdown() {
-  const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
+  const {
+    activeCycle,
+    activeCycleId,
+    amountSecondsPassed,
+    markCycleAsFinished,
+    setSecondsPassed,
+  } = useContext(CyclesContext)
 
   const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0
+  const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0
+  const minutesAmount = Math.floor(currentSeconds / 60)
+  const secondsAmount = currentSeconds % 60
+  const minute = String(minutesAmount).padStart(2, '0')
+  const second = String(secondsAmount).padStart(2, '0')
+
+  useEffect(() => {
+    if (activeCycle) {
+      document.title = `${minute}:${second}`
+    }
+  }, [minute, second, activeCycle])
 
   useEffect(() => {
     let interval: number
@@ -16,23 +34,12 @@ export function Countdown() {
           new Date(),
           activeCycle.startDate,
         )
-
         if (secondsDifference >= totalSeconds) {
-          setCycles((cycle) =>
-            cycle.map((item) => {
-              if (item.id === activeCycleId) {
-                return { ...item, finishedDate: new Date() }
-              } else {
-                return item
-              }
-            }),
-          )
-
-          setAmountSecondsPassed(totalSeconds)
-
+          markCycleAsFinished()
+          setSecondsPassed(totalSeconds)
           clearInterval(interval)
         } else {
-          setAmountSecondsPassed(secondsDifference)
+          setSecondsPassed(secondsDifference)
         }
       }, 1000)
     }
@@ -40,7 +47,8 @@ export function Countdown() {
     return () => {
       clearInterval(interval)
     }
-  }, [activeCycle, totalSeconds, activeCycleId])
+  }, [activeCycle, totalSeconds, activeCycleId, markCycleAsFinished])
+
   return (
     <CountdownContainer>
       <span>{minute[0]}</span>
