@@ -17,7 +17,7 @@ Para utilizar o Aplicativo Pomodoro, siga as etapas abaixo:
 3. Rode o comando (para instalar as dependências):
    npm install
 4. Em seguida rode:
-   npn run dev
+   npm run dev
 
 # Tecnologias e Bibliotecas
 
