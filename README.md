@@ -25,3 +25,4 @@ Para utilizar o Aplicativo Pomodoro, siga as etapas abaixo:
 -Styled Components
 -Zod
 -React-hook-form
+-Immer
